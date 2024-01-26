@@ -56,11 +56,29 @@
     {{ if or $taxonomyLink $showAuthor }}
     <div class="mb-5"></div>
     {{ end }}
-  
+    {{ if .Params.frenchPostUrl }}
+        <p>🇫🇷 Une version de cet article est <a class="decoration-primary-500 underline hover:underline-offset-2 dark:text-neutral" href="{{ .Params.frenchPostUrl }}">disponible en français</a>.</p>
+    {{ end }}
+    {{ if .Params.project_links }}
+        <div class="project-links">
+            {{ if .Params.project_links.github }}
+              <p>🐙 The project is available on <a class="decoration-primary-500 underline hover:underline-offset-2 dark:text-neutral" href="{{ .Params.project_links.github }}" target="blank">GitHub</a>.</p>
+            {{ end }}
+            {{ if .Params.project_links.website }}
+            <p>🌍 The website of the project is available on <a class="decoration-primary-500 underline hover:underline-offset-2 dark:text-neutral" href="{{ .Params.project_links.website.url }}" target="blank">{{ .Params.project_links.website.label }}</a>.</p>
+            {{ end }}
+            {{ if .Params.project_links.documentation }}
+            <p>📚 The documentation of the project is available on <a class="decoration-primary-500 underline hover:underline-offset-2 dark:text-neutral" href="{{ .Params.project_links.documentation.url }}" target="blank">{{ .Params.project_links.documentation.label }}</a>.</p>
+            {{ end }}
+            {{ if .Params.project_links.others }}
+            {{ range .Params.project_links.others }}
+              <p>{{ default (.emoji | default "🌍") }} The project is available on <a class="decoration-primary-500 underline hover:underline-offset-2 dark:text-neutral" href="{{ .url }}" target="blank">{{ .label }}</a>.</p>
+            {{ end }}
+            {{ end }}
+        </div>
+    {{ end }}
   </header>
-  
   <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
-    
     {{ if or (and (.Params.showTableOfContents | default (.Site.Params.article.showTableOfContents | default false)) (in
     .TableOfContents "<ul")) (.Site.Params.article.showRelatedPosts | default false) }} <div
       class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
@@ -74,18 +92,15 @@
       {{ end }}
 
       <div class="min-w-0 min-h-0 max-w-fit">
-        
         {{ partial "series.html" . }}
 
         <div class="article-content max-w-prose mb-20">
           {{ .Content | emojify }}
         </div>
-                
         {{ partial "series-closed.html" . }}
         {{ partial "sharing-links.html" . }}
-        {{ partial "related.html" . }}  
+        {{ partial "related.html" . }}
       </div>
-     
     {{ with .File }}
      <script>
         var oid = "views_{{ .Path }}"
@@ -95,7 +110,6 @@
       {{ $jsPage := resources.Get "js/page.js" }}
       {{ $jsPage = $jsPage | resources.Minify | resources.Fingerprint "sha512" }}
       <script type="text/javascript" src="{{ $jsPage.RelPermalink }}" integrity="{{ $jsPage.Data.Integrity }}"></script>
-  
     </section>
   <footer class="pt-8 max-w-prose print:hidden">
 
