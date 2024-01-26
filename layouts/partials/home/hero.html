@@ -20,7 +20,7 @@
                     {{ $authorImage := resources.Get . }}
                     {{ if $authorImage }}
                     {{ if not $disableImageOptimization }}
-                    {{ $authorImage = $authorImage.Fill "288x288" }}
+                    {{ $authorImage = $authorImage.Fill "288x288 webp q20" }}
                     {{ end }}
                     <img class="mb-2 rounded-full h-36 w-36" width="144" height="144"
                         alt="{{ $.Site.Author.name | default " Author" }}" src="{{ $authorImage.RelPermalink }}" />
